@@ -1,0 +1,22 @@
+---
+# tasks file for nginx
+- name: Add repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+
+- name: Install nginx
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - nginx start
+
+- name: Replace nginx.conf
+  template:
+    src=templates/nginx.conf.j2
+    dest=/etc/nginx/nginx.conf
+  notify:
+    - nginx reload
